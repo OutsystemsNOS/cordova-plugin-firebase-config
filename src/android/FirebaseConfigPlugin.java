@@ -12,6 +12,7 @@ import by.chemerisuk.cordova.support.CordovaMethod;
 import by.chemerisuk.cordova.support.ReflectiveCordovaPlugin;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 
 import org.apache.cordova.CallbackContext;
@@ -29,16 +30,20 @@ public class FirebaseConfigPlugin extends ReflectiveCordovaPlugin {
     protected void pluginInitialize() {
         Log.d(TAG, "Starting Firebase Remote Config plugin");
 
-        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance(); 
 
         String filename = preferences.getString("FirebaseRemoteConfigDefaults", "");
         if (filename.isEmpty()) {
             // always call setDefaults in order to avoid exception
             // https://github.com/firebase/quickstart-android/issues/291
+            FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(3600).build();
+            firebaseRemoteConfig.setConfigSettingsAsync(configSettings);
             firebaseRemoteConfig.setDefaultsAsync(Collections.<String, Object>emptyMap());
         } else {
             Context ctx = cordova.getActivity().getApplicationContext();
             int resourceId = ctx.getResources().getIdentifier(filename, "xml", ctx.getPackageName());
+            FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(3600).build();
+            firebaseRemoteConfig.setConfigSettingsAsync(configSettings);
             firebaseRemoteConfig.setDefaultsAsync(resourceId);
         }
     }
