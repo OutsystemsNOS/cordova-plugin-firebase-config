@@ -8,6 +8,17 @@ function promiseParameter(type, key) {
     });
 }
 
+exports.getValue = function (key, namespace, success, error) {
+  var args = [key];
+  if (typeof namespace === 'string') {
+    args.push(namespace);
+  } else {
+    error = success;
+    success = namespace;
+  }
+  exec(success, error, PLUGIN_NAME, "getValue", args);
+};
+
 exports.fetch =
 /**
  *
