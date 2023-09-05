@@ -52,7 +52,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <param name="android-package" value="by.chemerisuk.cordova.firebase.FirebaseConfigPlugin" />
             </feature>
         </config-file>
-
+               
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET" />
+        </config-file>
+               
         <dependency id="cordova-support-android-plugin" version="~2.0.4" />
 
         <framework src="platform('com.google.firebase:firebase-bom:$ANDROID_FIREBASE_BOM_VERSION')" />
