@@ -48,34 +48,6 @@ public class FirebaseConfigPlugin extends ReflectiveCordovaPlugin {
             firebaseRemoteConfig.setDefaultsAsync(resourceId);
         }
     }
-
-    @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-    	if (action.equals("getValue")) {
-    		if (args.length() > 1) {
-    			this.getValue(callbackContext, args.getString(0), args.getString(1));
-    		} else {
-    			this.getValue(callbackContext, args.getString(0), null);
-    		}
-    		return true;
-    	}
-    	return false;
-    }
-    
-    private void getValue(final CallbackContext callbackContext, final String key, final String namespace) {
-      cordova.getThreadPool().execute(new Runnable() {
-        public void run() {
-            try {
-                FirebaseRemoteConfigValue value = namespace == null
-                        ? FirebaseRemoteConfig.getInstance().getValue(key)
-                        : FirebaseRemoteConfig.getInstance().getValue(key, namespace);
-                callbackContext.success(value.asString());
-            } catch (Exception e) {
-                callbackContext.error(e.getMessage());
-            }
-        }
-      });
-    }
     
     @CordovaMethod(WORKER)
     protected void fetch(CordovaArgs args, CallbackContext callbackContext) throws Exception {
